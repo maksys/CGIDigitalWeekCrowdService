@@ -1,0 +1,15 @@
+C:\workspace\azure\BotBuilder-Samples\CSharp\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.csprojResolveAssemblyReference.cache
+C:\workspace\azure\BotBuilder-Samples\CSharp\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.exe.config
+C:\workspace\azure\BotBuilder-Samples\CSharp\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.exe
+C:\workspace\azure\BotBuilder-Samples\CSharp\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.pdb
+C:\workspace\azure\BotBuilder-Samples\CSharp\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.exe
+C:\workspace\azure\BotBuilder-Samples\CSharp\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.pdb
+C:\workspace\digitalweek\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.exe.config
+C:\workspace\digitalweek\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.exe
+C:\workspace\digitalweek\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.pdb
+C:\workspace\digitalweek\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.exe
+C:\workspace\digitalweek\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.pdb
+C:\workspace\digitalweek\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.csprojResolveAssemblyReference.cache
+C:\workspace\digitalweek\CGIDigitalWeekVoiceReco\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.exe.config
+C:\workspace\digitalweek\CGIDigitalWeekVoiceReco\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.exe
+C:\workspace\digitalweek\CGIDigitalWeekVoiceReco\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.pdb
