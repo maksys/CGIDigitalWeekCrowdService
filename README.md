@@ -1,12 +1,6 @@
 <<<<<<< HEAD
-﻿# Speech To Text Bot Sample
+﻿# Speech To Text and Text To Speech Web API
 
-A sample bot that illustrates how to use the Microsoft Cognitive Services Bing Speech API to analyze an audio file and convert the audio stream to text.
-
-[![Deploy to Azure][Deploy Button]][Deploy CSharp/SpeechToText]
-
-[Deploy Button]: https://azuredeploy.net/deploybutton.png
-[Deploy CSharp/SpeechToText]: https://azuredeploy.net
 
 ### Prerequisites
 
@@ -14,90 +8,56 @@ The minimum prerequisites to run this sample are:
 * The latest update of Visual Studio 2015. You can download the community version [here](http://www.visualstudio.com) for free.
 * The Bot Framework Emulator. To install the Bot Framework Emulator, download it from [here](https://emulator.botframework.com/). Please refer to [this documentation article](https://github.com/microsoft/botframework-emulator/wiki/Getting-Started) to know more about the Bot Framework Emulator.
 * **[Recommended]** Visual Studio Code for IntelliSense and debugging, download it from [here](https://code.visualstudio.com/) for free.
-* This sample currently uses a free trial Microsoft Cognitive service key with limited QPS. Please subscribe to Bing Speech Api services [here](https://www.microsoft.com/cognitive-services/en-us/subscriptions) and update the `MicrosoftSpeechApiKey` key in key in [Web.config](Web.config) file to try it out further.
 
 ````XML
   <appSettings>
     <add key="MicrosoftSpeechApiKey" value="PUT-YOUR-OWN-API-KEY-HERE" />
+	<add key="AccessUriToken" value="https://api.cognitive.microsoft.com/sts/v1.0/issueToken" />
+	<add key="VoiceName" value="Microsoft Server Speech Text to Speech Voice (fr-FR, HortenseRUS)" />
+    <add key="VoiceType" value="Male" />
+    <add key="Locale" value="fr-FR" />
+	<add key="AudioOutputFormat" value="Audio16Khz128KBitRateMonoMp3" />
+    <add key="STTRequestUri" value="https://speech.platform.bing.com/recognize/query" />
+    <add key="TTSRequestUri" value="https://speech.platform.bing.com/synthesize" />
   </appSettings>
 ````
 
 ### Usage
 
-Attach an audio file (wav format).
+Attach an audio file (wav format) or send a text to receive sound (wav format).
 
 ### Code Highlights
 
 Microsoft Cognitive Services provides a Speech Recognition API to convert audio into text. Check out [Bing Speech API](https://www.microsoft.com/cognitive-services/en-us/speech-api) for a complete reference of Speech APIs available. In this sample we are using the Speech Recognition API using the [REST API](https://www.microsoft.com/cognitive-services/en-us/Speech-api/documentation/API-Reference-REST/BingVoiceRecognition).
 
-In this sample we are using the API to get the text and send it back to the user. Check out the use of the `MicrosoftCognitiveSpeechService.GetTextFromAudioAsync()` method in the [Controllers/MessagesController](Controllers/MessagesController.cs) class.
+In this sample we are using the API to get the text and send it back to the user.
 ````C#
-var audioAttachment = activity.Attachments?.FirstOrDefault(a => a.ContentType.Equals("audio/wav"));
-if (audioAttachment != null)
+using (var client = new HttpClient())
 {
-    using (var client = new HttpClient())
-    {
-        var stream = await client.GetStreamAsync(audioAttachment.ContentUrl);
-        var text = await this.speechService.GetTextFromAudioAsync(stream);
-        message = ProcessText(activity.Text, text);
-    }
+	//TTS
+	client.BaseAddress = new Uri("http://localhost:3979");
+	var content = new FormUrlEncodedContent(new[]
+	{
+		new KeyValuePair<string, string>("", "Bonjour mon nom est bond james bond. Je suis un agent secret mon nom de code est 007")
+	});
+	var response = await client.PostAsync("/speech/synthesize", content);
+	response.EnsureSuccessStatusCode();
+	using (var stream = await response.Content.ReadAsStreamAsync())
+	using (var fileStream = File.Create(filename))
+	{
+		stream.Seek(0, SeekOrigin.Begin);
+		stream.CopyTo(fileStream);
+	}
+
+	//STT
+	using (var stream = File.OpenRead(filename))
+	{
+		stream.Seek(0, SeekOrigin.Begin);
+		response = await client.PostAsync("/speech/recognize", new StreamContent(stream));
+		response.EnsureSuccessStatusCode();
+		var speechText = await response.Content.ReadAsStringAsync();
+	}
 }
 ````
 
-and here is the implementation of `MicrosoftCognitiveSpeechService.GetTextFromAudioAsync()` in [Services/MicrosoftCognitiveSpeechService.cs](Services/MicrosoftCognitiveSpeechService.cs)
-````C#
-/// <summary>
-/// Gets text from an audio stream.
-/// </summary>
-/// <param name="audiostream"></param>
-/// <returns>Transcribed text. </returns>
-public async Task<string> GetTextFromAudioAsync(Stream audiostream)
-{
-    var requestUri = @"https://speech.platform.bing.com/recognize?scenarios=smd&appid=D4D52672-91D7-4C74-8AD8-42B1D98141A5&locale=en-US&device.os=bot&version=3.0&format=json&instanceid=565D69FF-E928-4B7E-87DA-9A750B96D9E3&requestid=" + Guid.NewGuid();
 
-    using (var client = new HttpClient())
-    {
-        var token = Authentication.Instance.GetAccessToken();
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.access_token);
-
-        using (var binaryContent = new ByteArrayContent(StreamToBytes(audiostream)))
-        {
-            binaryContent.Headers.TryAddWithoutValidation("content-type", "audio/wav; codec=\"audio/pcm\"; samplerate=16000");
-
-            var response = await client.PostAsync(requestUri, binaryContent);
-            var responseString = await response.Content.ReadAsStringAsync();
-            try
-            {
-                dynamic data = JsonConvert.DeserializeObject(responseString);
-                return data.header.name;
-            }
-            catch (JsonReaderException ex)
-            {
-                throw new Exception(responseString, ex);
-            }
-        }
-    }
-}
-````
-
-### Outcome
-
-You will see the following when connecting the Bot to the Emulator and send it an audio file and a command:
-
-Input:
-
-["What's the weather like?"](audio/whatstheweatherlike.wav)
-
-Output:
-
-![Sample Outcome](images/outcome-emulator.png)
-
-### More Information
-
-To get more information about how to get started in Bot Builder for .NET and Microsoft Cognitive Services Bing Speech API please review the following resources:
-* [Bot Builder for .NET](https://docs.microsoft.com/en-us/bot-framework/dotnet/)
-* [Microsoft Cognitive Services Bing Speech API](https://www.microsoft.com/cognitive-services/en-us/speech-api)
-=======
-# CGIDigitalWeekCrowdService
-Front service to retrieve stand informations
->>>>>>> fd1ce3497386031b172eac3cad6361e2807f2200
