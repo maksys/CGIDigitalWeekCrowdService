@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿# Speech To Text Bot Sample
 
 A sample bot that illustrates how to use the Microsoft Cognitive Services Bing Speech API to analyze an audio file and convert the audio stream to text.
@@ -96,3 +97,7 @@ Output:
 To get more information about how to get started in Bot Builder for .NET and Microsoft Cognitive Services Bing Speech API please review the following resources:
 * [Bot Builder for .NET](https://docs.microsoft.com/en-us/bot-framework/dotnet/)
 * [Microsoft Cognitive Services Bing Speech API](https://www.microsoft.com/cognitive-services/en-us/speech-api)
+=======
+# CGIDigitalWeekCrowdService
+Front service to retrieve stand informations
+>>>>>>> fd1ce3497386031b172eac3cad6361e2807f2200
