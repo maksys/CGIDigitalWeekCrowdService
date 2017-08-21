@@ -18,7 +18,8 @@ namespace TestVoiceRecoService
                 {
                     using (var client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri("http://localhost:3979");
+                        //client.BaseAddress = new Uri("http://localhost:3979");
+                        client.BaseAddress = new Uri("http://cgidigitalweekvoiceservice.azurewebsites.net");
                         var content = new FormUrlEncodedContent(new[]
                         {
                             new KeyValuePair<string, string>("", "Bonjour mon nom est bond james bond. Je suis un agent secret mon nom de code est 007")

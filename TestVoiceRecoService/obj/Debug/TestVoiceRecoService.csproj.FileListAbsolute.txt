@@ -13,3 +13,9 @@ C:\workspace\digitalweek\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.csp
 C:\workspace\digitalweek\CGIDigitalWeekVoiceReco\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.exe.config
 C:\workspace\digitalweek\CGIDigitalWeekVoiceReco\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.exe
 C:\workspace\digitalweek\CGIDigitalWeekVoiceReco\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.pdb
+C:\Users\macaignef\Source\Repos\CGIDigitalWeekCrowdService\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.exe.config
+C:\Users\macaignef\Source\Repos\CGIDigitalWeekCrowdService\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.exe
+C:\Users\macaignef\Source\Repos\CGIDigitalWeekCrowdService\TestVoiceRecoService\bin\Debug\TestVoiceRecoService.pdb
+C:\Users\macaignef\Source\Repos\CGIDigitalWeekCrowdService\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.csprojResolveAssemblyReference.cache
+C:\Users\macaignef\Source\Repos\CGIDigitalWeekCrowdService\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.exe
+C:\Users\macaignef\Source\Repos\CGIDigitalWeekCrowdService\TestVoiceRecoService\obj\Debug\TestVoiceRecoService.pdb
