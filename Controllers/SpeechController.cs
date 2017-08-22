@@ -1,7 +1,9 @@
 ﻿using CGIDigitalWeekVoiceReco.Enums;
 using CGIDigitalWeekVoiceReco.Model;
 using CGIDigitalWeekVoiceReco.Services;
+using Microsoft.Bot.Connector.DirectLine;
 using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,7 +18,9 @@ namespace CGIDigitalWeekVoiceReco.Controllers
     public class SpeechController : ApiController
     {
         private readonly MicrosoftCognitiveSpeechService speechService = new MicrosoftCognitiveSpeechService();
-
+        private static string directLineSecret = ConfigurationManager.AppSettings["DirectLineSecret"];
+        private static string botId = ConfigurationManager.AppSettings["BotId"];
+        private static string fromUser = "DirectLineSampleClientUser";
         /// <summary>
         /// POST: speech/synthesize
         /// Receive a message from a user and synthetize
@@ -25,12 +29,26 @@ namespace CGIDigitalWeekVoiceReco.Controllers
         [Route("speech/synthesize")]
         public async Task<HttpResponseMessage> GetTextToSpeech([FromBody]string text)
         {
+
             try
             {
+                DirectLineClient client = new DirectLineClient(directLineSecret);
+
+                var conversation = await client.Conversations.StartConversationAsync();
+                Activity userMessage = new Activity
+                {
+                    From = new ChannelAccount(fromUser),
+                    Text = text,
+                    Type = ActivityTypes.Message
+                };
+
+                await client.Conversations.PostActivityAsync(conversation.ConversationId, userMessage);
+                var v =  await CGIBotService.ReadBotMessagesAsync(client, conversation.ConversationId);
+
                 var inputOptions = new InputOptions()
                 {
                     // Text to be spoken
-                    Text = text,
+                    Text = v,
                     VoiceType = (Gender)Enum.Parse(typeof(Gender), WebConfigurationManager.AppSettings["VoiceType"]),
                     // Refer to the documentation for complete list of supported locales
                     Locale = WebConfigurationManager.AppSettings["Locale"],
@@ -40,7 +58,7 @@ namespace CGIDigitalWeekVoiceReco.Controllers
                     // Service can return audio in different output format
                     OutputFormat = (AudioOutputFormat)Enum.Parse(typeof(AudioOutputFormat), WebConfigurationManager.AppSettings["AudioOutputFormat"])
                 };
-                var speechStream = await speechService.GetTextToSpeechAsync(text, inputOptions);
+                var speechStream = await speechService.GetTextToSpeechAsync(v, inputOptions);
                 var response = new HttpResponseMessage(HttpStatusCode.OK);
                 response.Content = new StreamContent(speechStream);
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
